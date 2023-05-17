@@ -1,6 +1,6 @@
 from pybit.unified_trading import HTTP
 import time
-from sqlalchemy import Column, Integer, BigInteger, Float
+from sqlalchemy import Column, Integer, BigInteger, Float, String
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
@@ -12,16 +12,19 @@ API_SECRET = "XhEbHQpwNpUpoDIwFdG3YAzRdrzvp5oyBhob"
 bybit_session = HTTP(
     api_key=API_KEY,
     api_secret=API_SECRET,
-    testnet=False
+    testnet=True
     )
 
 kline_engine = create_engine('sqlite:///kline.db', echo=True)
+
 Base = declarative_base()
 
 
 class Kline(Base):
     __tablename__ = 'kline'
-    start_time = Column(BigInteger, primary_key=True)
+    id = Column(Integer, primary_key=True)
+    symbol = Column(String)
+    start_time = Column(BigInteger)
     open_price = Column(Float)
     high_price = Column(Float)
     low_price = Column(Float)
@@ -49,6 +52,7 @@ def save_data_to_db(symbol, interval, start, stop):
     
     for list in kline_dic["result"]["list"]:
         kline = Kline(
+            symbol=symbol,
             start_time=list[0],
             open_price=list[1],
             high_price=list[2],
