@@ -1,0 +1,7 @@
+dataclasses_json==0.5.7
+matplotlib==3.7.1
+mplfinance==0.12.9b7
+pandas==2.0.1
+pybit==5.2.0
+pydantic==1.10.7
+SQLAlchemy==1.4.46
