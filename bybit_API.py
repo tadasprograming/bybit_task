@@ -13,14 +13,8 @@ from sqlalchemy.orm import sessionmaker
 import matplotlib.pyplot as plt
 
 
-API_KEY = "EKim1rHsFKKuAKybhe"
-API_SECRET = "XhEbHQpwNpUpoDIwFdG3YAzRdrzvp5oyBhob"
-
 bybit_session = HTTP(
-    api_key=API_KEY,
-    api_secret=API_SECRET,
     testnet=True)
-
 
 def get_data_from_bybit(function_name, **kwargs):
     if hasattr(bybit_session, function_name):
