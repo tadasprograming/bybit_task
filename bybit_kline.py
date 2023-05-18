@@ -17,14 +17,12 @@ bybit_session = HTTP(
     testnet=True)
 
 
-def get_data(category, symbol, interval, start, stop):
-    kline_dic = bybit_session.get_kline(
-        category=category,
-        symbol=symbol,
-        interval=interval,
-        start=start,
-        end=stop)
-    return kline_dic['result']['list']
+def get_data_from_bybit(function_name, **kwargs):
+    if hasattr(bybit_session, function_name):
+        api_function = getattr(bybit_session, function_name)
+        return api_function(**kwargs)['result']['list']
+    else:
+        return print('Wrong API function')
 
 @dataclass_json
 @dataclass
@@ -58,10 +56,11 @@ class KlineData:
 
 current_time = int(time.time() * 1000)
 period = 24*60*60*1000
-kline_data = get_data(category="linear", symbol="BTCUSD",
-                    interval=60,
-                    start=current_time-period,
-                    stop=current_time)
+
+kline_data = get_data_from_bybit('get_kline', category="linear",
+                                  symbol="BTCUSD", interval=60,
+                                  start=current_time-period,
+                                  stop=current_time)
 
 def parse_data(data, symbol='BTCUSD'):
     return KlineData(
